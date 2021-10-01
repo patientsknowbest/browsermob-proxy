@@ -592,11 +592,21 @@ public interface BrowserMobProxy {
     void addLastHttpFilterFactory(HttpFiltersSource filterFactory);
 
     /**
+     * Clears all the existent response filters that are used to examine/manipulate the request before sending it to the server.
+     */
+    void clearResponseFilters();
+
+    /**
      * Adds a new ResponseFilter that can be used to examine and manipulate the response before sending it to the client.
      *
      * @param filter filter instance
      */
     void addResponseFilter(ResponseFilter filter);
+
+    /**
+     * Clears all the existent request filters that are used to examine/manipulate the request before sending it to the server.
+     */
+    void clearRequestFilters();
 
     /**
      * Adds a new RequestFilter that can be used to examine and manipulate the request before sending it to the server.

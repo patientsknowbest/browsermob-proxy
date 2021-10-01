@@ -292,13 +292,10 @@ public class InterceptorTest extends MockServerTest {
         proxy = new BrowserMobProxyServer();
         proxy.start();
 
-        proxy.addResponseFilter(new ResponseFilter() {
-            @Override
-            public void filterResponse(HttpResponse response, HttpMessageContents contents, HttpMessageInfo messageInfo) {
-                if (!contents.isText()) {
-                    if (Arrays.equals(originalBytes, contents.getBinaryContents())) {
-                        contents.setBinaryContents(newBytes);
-                    }
+        proxy.addResponseFilter((response, contents, messageInfo) -> {
+            if (!contents.isText()) {
+                if (Arrays.equals(originalBytes, contents.getBinaryContents())) {
+                    contents.setBinaryContents(newBytes);
                 }
             }
         });

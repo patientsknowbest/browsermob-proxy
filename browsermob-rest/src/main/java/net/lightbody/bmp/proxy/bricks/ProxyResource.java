@@ -364,6 +364,24 @@ public class ProxyResource {
         return Reply.saying().ok();
     }
 
+    @Delete
+    @At("/:port/filter/request")
+    public Reply<?> clearRequestFilters(@Named("port") int port) {
+        LegacyProxyServer legacyProxy = proxyManager.get(port);
+        if (legacyProxy == null) {
+            return Reply.saying().notFound();
+        }
+
+        if (!(legacyProxy instanceof BrowserMobProxyServer)) {
+            return Reply.saying().badRequest();
+        }
+
+        BrowserMobProxy proxy = (BrowserMobProxy) legacyProxy;
+        proxy.clearRequestFilters();
+
+        return Reply.saying().ok();
+    }
+
     @Post
     @At("/:port/filter/request")
     public Reply<?> addRequestFilter(@Named("port") int port, Request<String> request) throws IOException, ScriptException {
@@ -384,6 +402,24 @@ public class ProxyResource {
         requestResponseFilter.setRequestFilterScript(script);
 
         proxy.addRequestFilter(requestResponseFilter);
+
+        return Reply.saying().ok();
+    }
+
+    @Delete
+    @At("/:port/filter/response")
+    public Reply<?> clearResponseFilters(@Named("port") int port) {
+        LegacyProxyServer legacyProxy = proxyManager.get(port);
+        if (legacyProxy == null) {
+            return Reply.saying().notFound();
+        }
+
+        if (!(legacyProxy instanceof BrowserMobProxyServer)) {
+            return Reply.saying().badRequest();
+        }
+
+        BrowserMobProxy proxy = (BrowserMobProxy) legacyProxy;
+        proxy.clearResponseFilters();
 
         return Reply.saying().ok();
     }

@@ -79,6 +79,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * A LittleProxy-based implementation of {@link net.lightbody.bmp.BrowserMobProxy}.
@@ -927,6 +928,11 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
         filterFactories.add(filterFactory);
     }
 
+    @Override
+    public void clearResponseFilters() {
+        filterFactories.removeIf(filter -> filter instanceof ResponseFilterAdapter.FilterSource);
+    }
+
     /**
      * <b>Note:</b> The current implementation of this method forces a maximum response size of 2 MiB. To adjust the maximum response size, or
      * to disable aggregation (which disallows access to the {@link net.lightbody.bmp.util.HttpMessageContents}), you may add the filter source
@@ -935,6 +941,11 @@ public class BrowserMobProxyServer implements BrowserMobProxy {
     @Override
     public void addResponseFilter(ResponseFilter filter) {
         addLastHttpFilterFactory(new ResponseFilterAdapter.FilterSource(filter));
+    }
+
+    @Override
+    public void clearRequestFilters() {
+        filterFactories.removeIf(filter -> filter instanceof RequestFilterAdapter.FilterSource);
     }
 
     /**
